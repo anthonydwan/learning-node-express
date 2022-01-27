@@ -109,4 +109,18 @@ app.use((req, res) => {
 
 
 
+// ########################## express view engine #####################################
+// allow people to send about dynamic data and html
 
+// register view engine
+app.set('view engine', 'ejs')
+
+
+app.get("/", (req, res) => {
+  //   // send the html file (the default is a absolute path)
+  // res.sendFile('./views/index.html', {root: __dirname})
+
+  // instead of sending the whole html
+  res.render('index')
+  //then you create a ejs file - this becomes useful when content is dynamic 
+});
