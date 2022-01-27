@@ -46,17 +46,67 @@ server.listen(port, () => {
 
 // #########################  the basic routing  ############################################
 // good to have a 404.html page
+// when you learn express, this will be done undder the hood 
 const server = http.createServer((req, res) => {
   let path = "./views/";
   switch (req.url) {
     case "/":
       path += "index.html";
+      res.statusCode = 200;
       break;
     case "/about":
       path += "about.html";
+      res.statusCode = 200;
       break;
+    // redirect from about-me to about
+    case '/about-me':
+      res.statusCode = 301;
+      res.setHeader('Location', '/about')   
     default:
       path += "404.html";
+      // set up the status code
+      res.statusCode = 404;
       break;
   }
 });
+
+// ################################ npm ############################################
+// npm init to auto create pacakge.json file, then npm install or npm update will create a node_modules folder
+
+
+// ########################## express #####################################
+// express is a framework to make backend work a lot more convenient 
+const express = require('express');
+
+const app = express();
+
+//listen for requests
+app.listen(3000)
+
+app.get("/", (req, res) => {
+  // // infers the type
+  // res.send('<p>text here</p>');
+
+  // send the html file (the default is a absolute path)
+  res.sendFile('./views/index.html', {root: __dirname})
+});
+app.get("/about", (req, res) => {
+  // infers the type
+  res.send('<p>more text here</p>');
+});
+
+// redirect
+app.get('/about-us', (req, res) => {
+  res.redirect('/about');
+})
+
+// 404 page (if it does not match a get, it would get to the bottom and fire this function regardless of the url)
+// thus the position of 404 page is important 
+app.use((req, res) => {
+  res.sendFile('./views/404.html', {root: __dirname})
+})
+
+
+
+
+
